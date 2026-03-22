@@ -1,0 +1,102 @@
+---
+title: "Lab 1"
+output: pdf_document
+date: "2025-10-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+## When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+df = read.csv("Absenteeism_at_work.csv",sep=";",header=TRUE)
+
+```
+
+#1. 
+```{r}
+plot(df$Weight, df$Height,
+     main = "Scatter Plot of Height vs. Weight",
+     xlab = "Weight (kg)",
+     ylab = "Height (cm)",
+     pch = 19, # Solid circle points
+     col = "blue")
+
+```
+#2. Very basic show of comparison between weight and height. As some heights go up some weights do as well. The graph has some outliers but not really helpful other than that.
+
+```{r}
+hist(df$Absenteeism.time.in.hours,
+     main = "Histogram of Absenteeism Time in Hours",
+     xlab = "Absenteeism Time (hours)",
+     ylab = "Frequency",
+     col = "purple",
+     border = "black")
+
+```
+#Data is very skewed to the left. Also a lot of low frequency after the first bar, and a lot of absenteeism afterwards. It's common for perople to have short absencenes and not very long abscences.Í
+
+#3.
+```{r}
+hist(df$Age,
+     main = "Histogram of Age Corresponding to Absences",
+     xlab = "Age (Years)",
+     ylab = "Frequency",
+     col = "yellow",
+     border = "black")
+
+```
+#The data seems to be showing bimodial distribution. As there are two peaks instead of one. Data says that it's common for people to take abcences before their 40's and higher.
+
+#4.
+```{r}
+total_hours_by_month <- tapply(df$Absenteeism.time.in.hours, df$Month.of.absence, sum, na.rm = TRUE)
+
+full_month_labels <- c("NA", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+month_numbers_present <- as.numeric(names(total_hours_by_month))
+
+months_new <- month_numbers_present + 1
+
+month_names_present <- full_month_labels[months_new]
+
+# 6. Create the barplot.
+barplot(total_hours_by_month,
+        main = "Total Absent Hours by Month",
+        xlab = "Month of Absence",
+        ylab = "Total Absent Hours",
+        col = "skyblue",
+        border = "black",
+        names.arg = month_names_present
+)
+```
+#Most absent hours were during March and July. Lowest was in Jan and Aug/ Sept. Spring and Summer have some of the highest hours whereas fall and winter have some of the least hours.
+
+#5.
+```{r}
+boxplot(df$Absenteeism.time.in.hours ~ df$Social.smoker,
+        main = "Absenteeism Time by Social Smoker Status",
+        xlab = "Social Smoker (0 = No, 1 = Yes)",
+        ylab = "Absenteeism Time (hours)",
+        names = c("Non-Smoker", "Smoker"),
+        col = c("orange", "lightgrey"), # Playing with colors
+        border = "black")
+
+```
+#The data seems to show that Social smoker's take less time off wheareas non-smokers take more. Even when looking at the outliers, Non-smokers have the highest absenteeism time whereas smoker's have only 2 outliers.
+
+#6.
+```{r}
+boxplot(df$Absenteeism.time.in.hours ~ df$Social.drinker,
+        main = "Absenteeism Time by Social Drinker Status",
+        xlab = "Social Drinker (0 = No, 1 = Yes)",
+        ylab = "Absenteeism Time (hours)",
+        names = c("Non-Drinker", "Drinker"),
+        col = c("green", "red"),
+        border = "black")
+
+```
+#The data is very similar, except for a few outliers from the Drinkers side. The data doesn't show many differences and the realitve data sets are almost the same.
